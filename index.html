@@ -30,6 +30,17 @@
             font-size: 0.95rem;
         }
 
+        .sync-status {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 0.8rem;
+            color: #999;
+        }
+
+        .sync-status.saving { color: #e67e22; }
+        .sync-status.saved { color: #27ae60; }
+        .sync-status.error { color: #e74c3c; }
+
         .filters {
             display: flex;
             gap: 10px;
@@ -94,9 +105,7 @@
             font-weight: 500;
         }
 
-        .card-body {
-            padding: 16px;
-        }
+        .card-body { padding: 16px; }
 
         .card-price {
             font-size: 1.5rem;
@@ -118,9 +127,7 @@
             line-height: 1.4;
         }
 
-        .card-location::before {
-            content: "\U0001F4CD ";
-        }
+        .card-location::before { content: "\U0001F4CD "; }
 
         .card-details {
             display: flex;
@@ -155,9 +162,7 @@
             font-weight: 500;
         }
 
-        .card-link a:hover {
-            text-decoration: underline;
-        }
+        .card-link a:hover { text-decoration: underline; }
 
         /* Rating */
         .rating-section {
@@ -187,13 +192,8 @@
             user-select: none;
         }
 
-        .star.active {
-            color: #f4a261;
-        }
-
-        .star:hover {
-            color: #e9c46a;
-        }
+        .star.active { color: #f4a261; }
+        .star:hover { color: #e9c46a; }
 
         .rating-value {
             font-size: 0.8rem;
@@ -203,9 +203,7 @@
         }
 
         /* Comments */
-        .comments-section {
-            margin-top: 10px;
-        }
+        .comments-section { margin-top: 10px; }
 
         .comments-section label {
             font-size: 0.8rem;
@@ -238,9 +236,7 @@
             white-space: nowrap;
         }
 
-        .comment-input-row button:hover {
-            background: #3a56d4;
-        }
+        .comment-input-row button:hover { background: #3a56d4; }
 
         .comment-author-row {
             display: flex;
@@ -281,9 +277,7 @@
             gap: 8px;
         }
 
-        .comment-item:last-child {
-            border-bottom: none;
-        }
+        .comment-item:last-child { border-bottom: none; }
 
         .comment-text {
             flex: 1;
@@ -299,15 +293,8 @@
             margin-right: 4px;
         }
 
-        .comment-author-tag.bruno {
-            background: #e3f2fd;
-            color: #1565c0;
-        }
-
-        .comment-author-tag.nova {
-            background: #fce4ec;
-            color: #c62828;
-        }
+        .comment-author-tag.bruno { background: #e3f2fd; color: #1565c0; }
+        .comment-author-tag.nova { background: #fce4ec; color: #c62828; }
 
         .comment-date {
             font-size: 0.75rem;
@@ -322,9 +309,7 @@
             margin-left: 4px;
         }
 
-        .comment-delete:hover {
-            color: #e74c3c;
-        }
+        .comment-delete:hover { color: #e74c3c; }
 
         /* Status badge */
         .status-badge {
@@ -338,20 +323,9 @@
             z-index: 2;
         }
 
-        .status-favorita {
-            background: #ffd700;
-            color: #333;
-        }
-
-        .status-descartada {
-            background: #ff6b6b;
-            color: #fff;
-        }
-
-        .status-visitada {
-            background: #51cf66;
-            color: #fff;
-        }
+        .status-favorita { background: #ffd700; color: #333; }
+        .status-descartada { background: #ff6b6b; color: #fff; }
+        .status-visitada { background: #51cf66; color: #fff; }
 
         .card-actions {
             display: flex;
@@ -370,28 +344,87 @@
             transition: all 0.15s;
         }
 
-        .card-actions button:hover {
-            background: #f8f8f8;
+        .card-actions button:hover { background: #f8f8f8; }
+        .card-actions button.active-fav { background: #fff8dc; border-color: #ffd700; }
+        .card-actions button.active-desc { background: #ffe8e8; border-color: #ff6b6b; }
+        .card-actions button.active-visit { background: #e8ffe8; border-color: #51cf66; }
+
+        .card.descartada { opacity: 0.5; }
+
+        /* Token modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
         }
 
-        .card-actions button.active-fav {
-            background: #fff8dc;
-            border-color: #ffd700;
+        .modal {
+            background: #fff;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 420px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
 
-        .card-actions button.active-desc {
-            background: #ffe8e8;
-            border-color: #ff6b6b;
+        .modal h2 {
+            margin-bottom: 12px;
+            font-size: 1.2rem;
         }
 
-        .card-actions button.active-visit {
-            background: #e8ffe8;
-            border-color: #51cf66;
+        .modal p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 16px;
+            line-height: 1.5;
         }
 
-        .card.descartada {
-            opacity: 0.5;
+        .modal input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
         }
+
+        .modal button {
+            width: 100%;
+            padding: 10px;
+            background: #4361ee;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .modal button:hover { background: #3a56d4; }
+
+        /* Config button */
+        .config-btn {
+            position: fixed;
+            bottom: 16px;
+            right: 16px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #fff;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        .config-btn:hover { background: #f8f8f8; }
 
         /* Responsive */
         @media (max-width: 600px) {
@@ -407,6 +440,8 @@
     <h1>Novas Casas</h1>
     <p>Bruno & Nova - Casas para alugar</p>
 </header>
+
+<div class="sync-status" id="syncStatus"></div>
 
 <div class="filters">
     <select id="filterSort" onchange="renderCards()">
@@ -427,8 +462,9 @@
 </div>
 
 <div class="stats" id="stats"></div>
-
 <div class="grid" id="grid"></div>
+
+<button class="config-btn" onclick="showTokenModal()" title="Configuracoes">&#9881;</button>
 
 <script>
 // ============================================================
@@ -454,30 +490,166 @@ const CASAS = [
 ];
 
 // ============================================================
-// LocalStorage helpers
+// GitHub API - Shared data.json
 // ============================================================
-const STORAGE_KEY = "novas-casas-data";
+const REPO_OWNER = "BrunexT3";
+const REPO_NAME = "novas-casas";
+const DATA_FILE = "data.json";
+const API_BASE = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${DATA_FILE}`;
 
-function loadData() {
+let sharedData = {};
+let fileSha = null;
+let saveTimeout = null;
+let selectedAuthors = {}; // local-only, not saved to git
+
+function getToken() {
+    return localStorage.getItem("novas-casas-token") || "";
+}
+
+function setToken(token) {
+    localStorage.setItem("novas-casas-token", token.trim());
+}
+
+function setSyncStatus(text, cls) {
+    const el = document.getElementById("syncStatus");
+    el.textContent = text;
+    el.className = "sync-status " + (cls || "");
+}
+
+// Load data.json from GitHub
+async function loadSharedData() {
+    setSyncStatus("Carregando dados...", "saving");
     try {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-    } catch { return {}; }
+        const token = getToken();
+        const headers = { "Accept": "application/vnd.github.v3+json" };
+        if (token) headers["Authorization"] = `token ${token}`;
+
+        const resp = await fetch(API_BASE, { headers, cache: "no-store" });
+        if (resp.status === 404) {
+            // File doesn't exist yet - will be created on first save
+            sharedData = {};
+            fileSha = null;
+            setSyncStatus("Pronto (sem dados ainda)", "saved");
+            return;
+        }
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+
+        const json = await resp.json();
+        fileSha = json.sha;
+        const content = atob(json.content.replace(/\n/g, ""));
+        sharedData = JSON.parse(content);
+        setSyncStatus("Dados carregados", "saved");
+    } catch (err) {
+        console.error("Load error:", err);
+        if (!getToken()) {
+            showTokenModal();
+        } else {
+            setSyncStatus("Erro ao carregar: " + err.message, "error");
+        }
+    }
 }
 
-function saveData(data) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+// Save data.json to GitHub (debounced)
+function scheduleSave() {
+    if (saveTimeout) clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(() => saveSharedData(), 1500);
 }
 
+async function saveSharedData() {
+    const token = getToken();
+    if (!token) {
+        showTokenModal();
+        return;
+    }
+
+    setSyncStatus("Salvando...", "saving");
+    try {
+        // Re-read to get latest sha (avoid conflicts)
+        const headers = {
+            "Accept": "application/vnd.github.v3+json",
+            "Authorization": `token ${token}`
+        };
+
+        const getResp = await fetch(API_BASE, { headers, cache: "no-store" });
+        if (getResp.ok) {
+            const current = await getResp.json();
+            fileSha = current.sha;
+        }
+
+        const content = btoa(unescape(encodeURIComponent(JSON.stringify(sharedData, null, 2))));
+        const body = {
+            message: "update data",
+            content: content,
+        };
+        if (fileSha) body.sha = fileSha;
+
+        const putResp = await fetch(API_BASE, {
+            method: "PUT",
+            headers: {
+                ...headers,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+        });
+
+        if (!putResp.ok) {
+            const errBody = await putResp.json();
+            throw new Error(errBody.message || `HTTP ${putResp.status}`);
+        }
+
+        const result = await putResp.json();
+        fileSha = result.content.sha;
+        const now = new Date();
+        setSyncStatus(`Salvo ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`, "saved");
+    } catch (err) {
+        console.error("Save error:", err);
+        setSyncStatus("Erro ao salvar: " + err.message, "error");
+    }
+}
+
+// ============================================================
+// Data helpers (use sharedData instead of localStorage)
+// ============================================================
 function getCardData(id) {
-    const data = loadData();
-    if (!data[id]) data[id] = { rating: 0, comments: [], status: "none", author: "bruno" };
-    return data[id];
+    if (!sharedData[id]) sharedData[id] = { rating: 0, comments: [], status: "none" };
+    return sharedData[id];
 }
 
 function setCardData(id, cardData) {
-    const data = loadData();
-    data[id] = cardData;
-    saveData(data);
+    sharedData[id] = cardData;
+    scheduleSave();
+}
+
+// ============================================================
+// Token modal
+// ============================================================
+function showTokenModal() {
+    // Remove existing modal
+    const existing = document.getElementById("tokenModal");
+    if (existing) existing.remove();
+
+    const modal = document.createElement("div");
+    modal.id = "tokenModal";
+    modal.className = "modal-overlay";
+    modal.innerHTML = `
+        <div class="modal">
+            <h2>Configuracao</h2>
+            <p>Cole o token do GitHub para salvar comentarios e notas de forma compartilhada.
+            O token fica salvo apenas no seu navegador.</p>
+            <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxx" value="${getToken()}">
+            <button onclick="saveToken()">Salvar</button>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    document.getElementById("tokenInput").focus();
+}
+
+async function saveToken() {
+    const input = document.getElementById("tokenInput");
+    setToken(input.value);
+    document.getElementById("tokenModal").remove();
+    await loadSharedData();
+    renderCards();
 }
 
 // ============================================================
@@ -491,7 +663,6 @@ function renderCards() {
 
     let casas = [...CASAS];
 
-    // Filter
     if (search) {
         casas = casas.filter(c => c.endereco.toLowerCase().includes(search));
     }
@@ -502,7 +673,6 @@ function renderCards() {
         });
     }
 
-    // Sort
     casas.sort((a, b) => {
         switch (sort) {
             case "date-desc": return b.data.localeCompare(a.data);
@@ -514,15 +684,13 @@ function renderCards() {
         }
     });
 
-    // Stats
-    const allData = loadData();
-    const totalFav = CASAS.filter(c => (allData[c.id]?.status) === "favorita").length;
+    const totalFav = CASAS.filter(c => (sharedData[c.id]?.status) === "favorita").length;
     document.getElementById("stats").textContent =
         `${CASAS.length} casa${CASAS.length !== 1 ? 's' : ''} | ${totalFav} favorita${totalFav !== 1 ? 's' : ''} | Mostrando ${casas.length}`;
 
     grid.innerHTML = casas.map(casa => {
         const d = getCardData(casa.id);
-        const statusClass = d.status && d.status !== "none" ? ` ${d.status}` : "";
+        const author = selectedAuthors[casa.id] || "bruno";
 
         const imgHtml = casa.foto
             ? `<img class="card-img" src="${casa.foto}" alt="Foto" onclick="window.open('${casa.link}','_blank')" onerror="this.outerHTML='<div class=card-img-placeholder>Sem foto</div>'">`
@@ -551,7 +719,7 @@ function renderCards() {
         if (casa.quartos) detailItems.push(`<span>${casa.quartos} quarto${casa.quartos > 1 ? 's' : ''}</span>`);
         if (casa.banheiros) detailItems.push(`<span>${casa.banheiros} banheiro${casa.banheiros > 1 ? 's' : ''}</span>`);
         if (casa.vagas !== undefined) detailItems.push(`<span>${casa.vagas} vaga${casa.vagas !== 1 ? 's' : ''}</span>`);
-        if (casa.area) detailItems.push(`<span>${casa.area}m²</span>`);
+        if (casa.area) detailItems.push(`<span>${casa.area}m&sup2;</span>`);
         const tags = [];
         if (casa.mobiliada) tags.push("Mobiliada");
         if (casa.aceita_pet) tags.push("Aceita pet");
@@ -559,7 +727,7 @@ function renderCards() {
         const condText = casa.condominio ? ` <small>+ R$ ${casa.condominio.toLocaleString('pt-BR')} cond.</small>` : "";
 
         return `
-        <div class="card${statusClass === ' descartada' ? ' descartada' : ''}" id="card-${casa.id}">
+        <div class="card${d.status === 'descartada' ? ' descartada' : ''}" id="card-${casa.id}">
             ${statusBadge}
             ${imgHtml}
             <div class="card-body">
@@ -591,9 +759,9 @@ function renderCards() {
 
                 <div class="comments-section">
                     <label>Comentarios</label>
-                    <div class="comment-author-row" id="author-${casa.id}">
-                        <button class="${(d.author || 'bruno') === 'bruno' ? 'selected' : ''}" onclick="selectAuthor('${casa.id}','bruno')">Bruno</button>
-                        <button class="${(d.author || 'bruno') === 'nova' ? 'selected' : ''}" onclick="selectAuthor('${casa.id}','nova')">Nova</button>
+                    <div class="comment-author-row">
+                        <button class="${author === 'bruno' ? 'selected' : ''}" onclick="selectAuthor('${casa.id}','bruno')">Bruno</button>
+                        <button class="${author === 'nova' ? 'selected' : ''}" onclick="selectAuthor('${casa.id}','nova')">Nova</button>
                     </div>
                     <div class="comment-input-row">
                         <input type="text" id="input-${casa.id}" placeholder="Escrever comentario..." onkeydown="if(event.key==='Enter')addComment('${casa.id}')">
@@ -633,9 +801,7 @@ function toggleStatus(id, status) {
 }
 
 function selectAuthor(id, author) {
-    const d = getCardData(id);
-    d.author = author;
-    setCardData(id, d);
+    selectedAuthors[id] = author;
     renderCards();
 }
 
@@ -646,9 +812,10 @@ function addComment(id) {
     const d = getCardData(id);
     if (!d.comments) d.comments = [];
     const now = new Date();
+    const author = selectedAuthors[id] || "bruno";
     d.comments.push({
         text,
-        author: d.author || "bruno",
+        author,
         date: `${now.getDate().toString().padStart(2,'0')}/${(now.getMonth()+1).toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`
     });
     setCardData(id, d);
@@ -663,8 +830,15 @@ function deleteComment(id, idx) {
     renderCards();
 }
 
+// ============================================================
 // Init
-renderCards();
+// ============================================================
+async function init() {
+    await loadSharedData();
+    renderCards();
+}
+
+init();
 </script>
 
 </body>
