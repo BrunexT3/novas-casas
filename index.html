@@ -349,6 +349,92 @@
         .act-btn.on-visit { background: var(--green-light); border-color: var(--green); color: #065f46; }
         .act-btn.on-desc { background: var(--red-light); border-color: var(--red); color: #991b1b; }
 
+        /* Edit panel */
+        .edit-panel {
+            margin-top: 14px;
+            padding: 14px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1.5px solid var(--border);
+            animation: scaleIn 0.2s ease-out;
+        }
+
+        .edit-panel-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .edit-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .edit-field {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .edit-field label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .edit-field input {
+            padding: 7px 10px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-family: inherit;
+            background: var(--card);
+            transition: all 0.2s;
+        }
+
+        .edit-field input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+        }
+
+        .edit-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 10px;
+            justify-content: flex-end;
+        }
+
+        .edit-actions button {
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-save {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+        }
+
+        .btn-save:hover { background: #4338ca; }
+
+        .btn-cancel {
+            background: var(--card);
+            color: var(--text-secondary);
+            border: 1.5px solid var(--border);
+        }
+
+        .btn-cancel:hover { background: #f1f5f9; }
+
         /* Rating */
         .rating-row {
             margin-top: 14px;
@@ -768,6 +854,7 @@ let shared = {};
 let fileSha = null;
 let saveTimer = null;
 let authors = {};
+let editingCard = null;
 
 function getToken() { return localStorage.getItem("nc-token") || ""; }
 function setToken(t) { localStorage.setItem("nc-token", t.trim()); }
@@ -904,6 +991,17 @@ function renderCards() {
     grid.innerHTML = list.map((c, idx) => {
         const d = getData(c.id);
         const author = authors[c.id] || "bruno";
+        const editing = editingCard === c.id;
+
+        // Use overrides from shared data if available
+        const preco = d.preco !== undefined ? d.preco : c.preco;
+        const cond = d.condominio !== undefined ? d.condominio : c.condominio;
+        const quartos = d.quartos !== undefined ? d.quartos : c.quartos;
+        const banheiros = d.banheiros !== undefined ? d.banheiros : c.banheiros;
+        const vagas = d.vagas !== undefined ? d.vagas : c.vagas;
+        const areaM2 = d.area !== undefined ? d.area : c.area;
+        const iptu = d.iptu || 0;
+        const obsText = d.obs !== undefined ? d.obs : c.obs;
 
         const img = c.foto
             ? `<img class="card-img" src="${c.foto}" alt="" onclick="window.open('${c.link}','_blank')" onerror="this.outerHTML='<div class=card-img-placeholder>Sem foto</div>'">`
@@ -912,17 +1010,18 @@ function renderCards() {
         const statusBadge = d.status && d.status !== "none"
             ? `<span class="badge badge-status badge-${d.status}">${d.status}</span>` : "";
 
-        const priceStr = c.preco > 0
-            ? `R$ ${c.preco.toLocaleString('pt-BR')}<small>/mes</small>`
+        const priceStr = preco > 0
+            ? `R$ ${preco.toLocaleString('pt-BR')}<small>/mes</small>`
             : `<span style="color:var(--text-muted);font-size:1.1rem">A consultar</span>`;
 
-        const condStr = c.condominio ? ` <small>+ R$ ${c.condominio.toLocaleString('pt-BR')} cond.</small>` : "";
+        const condStr = cond ? ` <small>+ R$ ${cond.toLocaleString('pt-BR')} cond.</small>` : "";
+        const iptuStr = iptu ? ` <small>+ R$ ${iptu.toLocaleString('pt-BR')} IPTU</small>` : "";
 
         const chips = [];
-        if (c.quartos) chips.push(`${ICO.bed} ${c.quartos} qto${c.quartos>1?'s':''}`);
-        if (c.banheiros) chips.push(`${ICO.bath} ${c.banheiros} ban${c.banheiros>1?'h':'h'}`);
-        if (c.vagas) chips.push(`${ICO.car} ${c.vagas} vaga${c.vagas>1?'s':''}`);
-        if (c.area) chips.push(`${ICO.area} ${c.area}m\u00B2`);
+        if (quartos) chips.push(`${ICO.bed} ${quartos} qto${quartos>1?'s':''}`);
+        if (banheiros) chips.push(`${ICO.bath} ${banheiros} banh`);
+        if (vagas) chips.push(`${ICO.car} ${vagas} vaga${vagas>1?'s':''}`);
+        if (areaM2) chips.push(`${ICO.area} ${areaM2}m\u00B2`);
 
         const stars = [1,2,3,4,5].map(i =>
             `<span class="star ${i<=d.rating?'active':''}" onclick="setRating('${c.id}',${i})">&#9733;</span>`
@@ -938,18 +1037,61 @@ function renderCards() {
 
         const [y,m,dd] = c.data.split("-");
 
+        const editPanel = editing ? `
+            <div class="edit-panel">
+                <div class="edit-panel-title">Editar informacoes</div>
+                <div class="edit-grid">
+                    <div class="edit-field">
+                        <label>Aluguel (R$)</label>
+                        <input type="number" id="ed-preco-${c.id}" value="${preco||''}" placeholder="0">
+                    </div>
+                    <div class="edit-field">
+                        <label>Condominio (R$)</label>
+                        <input type="number" id="ed-cond-${c.id}" value="${cond||''}" placeholder="0">
+                    </div>
+                    <div class="edit-field">
+                        <label>IPTU (R$)</label>
+                        <input type="number" id="ed-iptu-${c.id}" value="${iptu||''}" placeholder="0">
+                    </div>
+                    <div class="edit-field">
+                        <label>Area (m2)</label>
+                        <input type="number" id="ed-area-${c.id}" value="${areaM2||''}" placeholder="0">
+                    </div>
+                    <div class="edit-field">
+                        <label>Quartos</label>
+                        <input type="number" id="ed-qtos-${c.id}" value="${quartos||''}" placeholder="0">
+                    </div>
+                    <div class="edit-field">
+                        <label>Banheiros</label>
+                        <input type="number" id="ed-banh-${c.id}" value="${banheiros||''}" placeholder="0">
+                    </div>
+                    <div class="edit-field">
+                        <label>Vagas</label>
+                        <input type="number" id="ed-vagas-${c.id}" value="${vagas||''}" placeholder="0">
+                    </div>
+                    <div class="edit-field">
+                        <label>Obs</label>
+                        <input type="text" id="ed-obs-${c.id}" value="${esc(obsText||'')}" placeholder="Observacao">
+                    </div>
+                </div>
+                <div class="edit-actions">
+                    <button class="btn-cancel" onclick="cancelEdit()">Cancelar</button>
+                    <button class="btn-save" onclick="saveEdit('${c.id}')">Salvar</button>
+                </div>
+            </div>` : '';
+
         return `
         <div class="card${d.status==='descartada'?' descartada':''}" style="animation-delay:${idx*0.06}s">
             <div class="card-img-wrapper">
                 ${statusBadge}${img}
             </div>
             <div class="card-body">
-                <div class="card-price">${priceStr}${condStr}</div>
+                <div class="card-price">${priceStr}${condStr}${iptuStr}</div>
                 <div class="card-location">${ICO.pin} ${esc(c.endereco)}</div>
                 <div class="card-chips">
                     ${chips.map(ch=>`<span class="chip">${ch}</span>`).join("")}
                 </div>
-                ${c.obs?`<div class="card-obs">${esc(c.obs)}</div>`:''}
+                ${obsText?`<div class="card-obs">${esc(obsText)}</div>`:''}
                 <div class="card-meta">
                     <span>${dd}/${m}/${y}</span>
                     <a href="${c.link}" target="_blank">${ICO.ext} Ver anuncio</a>
@@ -958,7 +1100,9 @@ function renderCards() {
                     <button class="act-btn ${d.status==='favorita'?'on-fav':''}" onclick="togStatus('${c.id}','favorita')">&#9733; Favorita</button>
                     <button class="act-btn ${d.status==='visitada'?'on-visit':''}" onclick="togStatus('${c.id}','visitada')">&#10003; Visitada</button>
                     <button class="act-btn ${d.status==='descartada'?'on-desc':''}" onclick="togStatus('${c.id}','descartada')">&#10007; Descartada</button>
+                    <button class="act-btn" onclick="toggleEdit('${c.id}')" style="${editing?'border-color:var(--primary);color:var(--primary);background:var(--primary-light)':''}">&#9998; Editar</button>
                 </div>
+                ${editPanel}
                 <div class="rating-row">
                     <div class="rating-label">Nota</div>
                     <div class="stars">${stars}<span class="rating-num">${d.rating>0?d.rating+'/5':'-'}</span></div>
@@ -985,6 +1129,35 @@ function esc(t) { const d=document.createElement('div'); d.textContent=t; return
 function setRating(id, r) { const d=getData(id); d.rating=d.rating===r?0:r; setData(id,d); renderCards(); }
 function togStatus(id, s) { const d=getData(id); d.status=d.status===s?"none":s; setData(id,d); renderCards(); }
 function pickAuthor(id, a) { authors[id]=a; renderCards(); }
+
+function toggleEdit(id) {
+    editingCard = editingCard === id ? null : id;
+    renderCards();
+}
+
+function cancelEdit() {
+    editingCard = null;
+    renderCards();
+}
+
+function saveEdit(id) {
+    const d = getData(id);
+    const v = (sel) => { const el=document.getElementById(sel); return el ? el.value : ''; };
+    const num = (sel) => { const n = parseFloat(v(sel)); return isNaN(n) ? 0 : n; };
+
+    d.preco = num(`ed-preco-${id}`);
+    d.condominio = num(`ed-cond-${id}`);
+    d.iptu = num(`ed-iptu-${id}`);
+    d.area = num(`ed-area-${id}`);
+    d.quartos = num(`ed-qtos-${id}`);
+    d.banheiros = num(`ed-banh-${id}`);
+    d.vagas = num(`ed-vagas-${id}`);
+    d.obs = v(`ed-obs-${id}`);
+
+    setData(id, d);
+    editingCard = null;
+    renderCards();
+}
 
 function addCmt(id) {
     const inp=document.getElementById(`inp-${id}`);
