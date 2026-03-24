@@ -228,11 +228,6 @@
             right: 14px;
         }
 
-        .badge-type {
-            left: 14px;
-            background: rgba(0,0,0,0.55);
-            color: #fff;
-        }
 
         .badge-favorita { background: rgba(245,158,11,0.9); color: #fff; }
         .badge-descartada { background: rgba(239,68,68,0.9); color: #fff; }
@@ -254,20 +249,6 @@
             color: var(--text-muted);
         }
 
-        .card-price .tipo-tag {
-            display: inline-block;
-            font-size: 0.65rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 2px 8px;
-            border-radius: 6px;
-            margin-left: 8px;
-            vertical-align: middle;
-        }
-
-        .tipo-aluguel { background: #dbeafe; color: #1e40af; }
-        .tipo-venda { background: #fce7f3; color: #9d174d; }
 
         .card-location {
             font-size: 0.92rem;
@@ -677,11 +658,6 @@
             <option value="visitada">Visitadas</option>
             <option value="descartada">Descartadas</option>
         </select>
-        <select id="filterType" onchange="renderCards()">
-            <option value="all">Venda & Aluguel</option>
-            <option value="aluguel">Aluguel</option>
-            <option value="venda">Venda</option>
-        </select>
         <input type="text" id="filterSearch" placeholder="Buscar bairro..." oninput="renderCards()">
     </div>
 
@@ -700,103 +676,85 @@ const CASAS = [
         id: "casa-006",
         foto: "",
         preco: 10000,
-        tipo: "aluguel",
         condominio: 0,
         endereco: "Cajuru do Sul - Sorocaba/SP",
         quartos: 4,
         banheiros: 0,
         vagas: 0,
         area: 350,
-        mobiliada: false,
-        aceita_pet: false,
         link: "https://www.vivareal.com.br/imovel/casa-de-condominio-4-quartos-cajuru-do-sul-bairros-sorocaba-com-garagem-350m2-aluguel-RS10000-id-2867542674/",
         data: "2026-03-24",
-        obs: "Casa de condominio com garagem"
+        obs: ""
     },
     {
         id: "casa-005",
         foto: "",
-        preco: 2200000,
-        tipo: "venda",
+        preco: 0,
         condominio: 0,
         endereco: "Ibiti Royal Park - Sorocaba/SP",
         quartos: 4,
         banheiros: 0,
         vagas: 0,
         area: 270,
-        mobiliada: false,
-        aceita_pet: false,
         link: "https://www.vivareal.com.br/imovel/casa-de-condominio-4-quartos-ibiti-royal-park-bairros-sorocaba-com-garagem-270m2-venda-RS2200000-id-2863393760/",
         data: "2026-03-24",
-        obs: "Casa de condominio com garagem"
+        obs: "Venda R$ 2.200.000 - verificar valor do aluguel"
     },
     {
         id: "casa-004",
         foto: "",
-        preco: 1750000,
-        tipo: "venda",
+        preco: 0,
         condominio: 0,
         endereco: "Cond. Ibiti Reserva - Sorocaba/SP",
         quartos: 3,
         banheiros: 0,
         vagas: 0,
         area: 260,
-        mobiliada: false,
-        aceita_pet: false,
         link: "https://www.vivareal.com.br/imovel/casa-de-condominio-3-quartos-condominio-ibiti-reserva-bairros-sorocaba-com-garagem-260m2-venda-RS1750000-id-2869042412/",
         data: "2026-03-24",
-        obs: "Casa de condominio com garagem"
+        obs: "Venda R$ 1.750.000 - verificar valor do aluguel"
     },
     {
         id: "casa-003",
         foto: "",
-        preco: 2290000,
-        tipo: "venda",
+        preco: 0,
         condominio: 0,
         endereco: "Cond. Terras de Sao Lucas - Sorocaba/SP",
         quartos: 3,
         banheiros: 0,
         vagas: 0,
         area: 371,
-        mobiliada: false,
-        aceita_pet: false,
         link: "https://www.vivareal.com.br/imovel/casa-de-condominio-3-quartos-condominio-terras-de-sao-lucas-bairros-sorocaba-com-garagem-371m2-venda-RS2290000-id-2874014023/",
         data: "2026-03-24",
-        obs: "Casa de condominio com garagem"
+        obs: "Venda R$ 2.290.000 - verificar valor do aluguel"
     },
     {
         id: "casa-002",
         foto: "",
         preco: 8800,
-        tipo: "aluguel",
         condominio: 0,
         endereco: "Ibiti Royal Park - Sorocaba/SP",
         quartos: 3,
         banheiros: 0,
         vagas: 0,
         area: 250,
-        mobiliada: false,
-        aceita_pet: false,
         link: "https://www.vivareal.com.br/imovel/casa-de-condominio-3-quartos-ibiti-royal-park-bairros-sorocaba-com-garagem-250m2-aluguel-RS8800-id-2868962305/",
         data: "2026-03-24",
-        obs: "Casa de condominio com garagem"
+        obs: ""
     },
     {
         id: "casa-001",
         foto: "",
-        preco: 1700000,
-        tipo: "venda",
+        preco: 0,
         condominio: 0,
         endereco: "Parque Ibiti Reserva - Sorocaba/SP",
         quartos: 4,
         banheiros: 0,
         vagas: 0,
         area: 270,
-        mobiliada: false,
-        aceita_pet: false,
         link: "https://www.vivareal.com.br/imovel/casa-de-condominio-4-quartos-parque-ibiti-reserva-bairros-sorocaba-com-garagem-270m2-venda-RS1700000-id-2853706232/",
         data: "2026-03-24",
-        obs: "Casa de condominio com garagem"
+        obs: "Venda R$ 1.700.000 - verificar valor do aluguel"
     },
 ];
 
@@ -918,13 +876,11 @@ function renderCards() {
     const grid = document.getElementById("grid");
     const sort = document.getElementById("filterSort").value;
     const statusF = document.getElementById("filterStatus").value;
-    const typeF = document.getElementById("filterType").value;
     const search = document.getElementById("filterSearch").value.toLowerCase();
 
     let list = [...CASAS];
     if (search) list = list.filter(c => c.endereco.toLowerCase().includes(search));
     if (statusF !== "all") list = list.filter(c => (getData(c.id).status || "none") === statusF);
-    if (typeF !== "all") list = list.filter(c => c.tipo === typeF);
 
     list.sort((a, b) => {
         switch (sort) {
@@ -956,13 +912,10 @@ function renderCards() {
         const statusBadge = d.status && d.status !== "none"
             ? `<span class="badge badge-status badge-${d.status}">${d.status}</span>` : "";
 
-        const tipoBadge = `<span class="badge badge-type">${c.tipo}</span>`;
-
-        const priceStr = c.tipo === "aluguel"
+        const priceStr = c.preco > 0
             ? `R$ ${c.preco.toLocaleString('pt-BR')}<small>/mes</small>`
-            : `R$ ${c.preco.toLocaleString('pt-BR')}`;
+            : `<span style="color:var(--text-muted);font-size:1.1rem">A consultar</span>`;
 
-        const tipoTag = `<span class="tipo-tag tipo-${c.tipo}">${c.tipo}</span>`;
         const condStr = c.condominio ? ` <small>+ R$ ${c.condominio.toLocaleString('pt-BR')} cond.</small>` : "";
 
         const chips = [];
@@ -988,10 +941,10 @@ function renderCards() {
         return `
         <div class="card${d.status==='descartada'?' descartada':''}" style="animation-delay:${idx*0.06}s">
             <div class="card-img-wrapper">
-                ${tipoBadge}${statusBadge}${img}
+                ${statusBadge}${img}
             </div>
             <div class="card-body">
-                <div class="card-price">${priceStr}${tipoTag}${condStr}</div>
+                <div class="card-price">${priceStr}${condStr}</div>
                 <div class="card-location">${ICO.pin} ${esc(c.endereco)}</div>
                 <div class="card-chips">
                     ${chips.map(ch=>`<span class="chip">${ch}</span>`).join("")}
