@@ -3,654 +3,913 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Novas Casas - Bruno & Nova</title>
+    <title>Casas para Alugar - Bru & Tha</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg: #f5f6fa;
+            --card: #ffffff;
+            --primary: #4f46e5;
+            --primary-light: #eef2ff;
+            --green: #059669;
+            --green-light: #ecfdf5;
+            --red: #ef4444;
+            --red-light: #fef2f2;
+            --amber: #f59e0b;
+            --amber-light: #fffbeb;
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border: #e2e8f0;
+            --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.08), 0 4px 10px rgba(0,0,0,0.04);
+            --shadow-xl: 0 20px 40px rgba(0,0,0,0.1);
+            --radius: 16px;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f0f2f5;
-            color: #1a1a2e;
-            padding: 20px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
         }
 
-        header {
+        /* Hero header */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 48px 24px 56px;
             text-align: center;
-            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
         }
 
-        header h1 {
-            font-size: 1.8rem;
-            color: #1a1a2e;
-            margin-bottom: 4px;
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%);
+            animation: heroGlow 8s ease-in-out infinite alternate;
         }
 
-        header p {
-            color: #666;
-            font-size: 0.95rem;
+        @keyframes heroGlow {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-5%, 5%); }
         }
 
-        .sync-status {
+        .hero h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.5px;
+            position: relative;
+            z-index: 1;
+            animation: fadeInDown 0.6s ease-out;
+        }
+
+        .hero p {
+            color: rgba(255,255,255,0.8);
+            font-size: 1rem;
+            font-weight: 400;
+            margin-top: 6px;
+            position: relative;
+            z-index: 1;
+            animation: fadeInDown 0.6s ease-out 0.1s both;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Sync status */
+        .sync-bar {
             text-align: center;
-            margin-bottom: 10px;
-            font-size: 0.8rem;
-            color: #999;
+            padding: 8px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
         }
 
-        .sync-status.saving { color: #e67e22; }
-        .sync-status.saved { color: #27ae60; }
-        .sync-status.error { color: #e74c3c; }
+        .sync-bar.saving { background: #fef3c7; color: #92400e; }
+        .sync-bar.saved { background: #d1fae5; color: #065f46; }
+        .sync-bar.error { background: #fee2e2; color: #991b1b; }
+        .sync-bar.hidden { height: 0; padding: 0; overflow: hidden; opacity: 0; }
 
-        .filters {
+        /* Container */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Toolbar */
+        .toolbar {
             display: flex;
             gap: 10px;
             justify-content: center;
-            margin-bottom: 24px;
+            align-items: center;
+            padding: 20px 0 16px;
             flex-wrap: wrap;
+            animation: fadeInUp 0.5s ease-out 0.2s both;
         }
 
-        .filters select, .filters input {
-            padding: 8px 14px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            background: #fff;
+        .toolbar select, .toolbar input {
+            padding: 10px 16px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.88rem;
+            font-family: inherit;
+            background: var(--card);
+            color: var(--text);
+            transition: all 0.2s;
+            box-shadow: var(--shadow);
         }
 
+        .toolbar select:focus, .toolbar input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79,70,229,0.12);
+        }
+
+        .toolbar input { min-width: 180px; }
+
+        /* Stats bar */
         .stats {
             text-align: center;
-            margin-bottom: 20px;
-            color: #666;
+            padding: 0 0 20px;
             font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            animation: fadeInUp 0.5s ease-out 0.3s both;
         }
 
+        /* Grid */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 24px;
+            padding-bottom: 60px;
         }
 
+        /* Card */
         .card {
-            background: #fff;
-            border-radius: 14px;
+            background: var(--card);
+            border-radius: var(--radius);
             overflow: hidden;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: var(--shadow);
+            transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             position: relative;
+            animation: scaleIn 0.4s ease-out both;
         }
 
         .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .card.descartada { opacity: 0.45; filter: grayscale(30%); }
+
+        .card-img-wrapper {
+            position: relative;
+            overflow: hidden;
         }
 
         .card-img {
             width: 100%;
-            height: 220px;
+            height: 230px;
             object-fit: cover;
             cursor: pointer;
+            transition: transform 0.5s ease;
         }
+
+        .card:hover .card-img { transform: scale(1.03); }
 
         .card-img-placeholder {
             width: 100%;
-            height: 220px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            height: 230px;
+            background: linear-gradient(135deg, #a78bfa, #818cf8);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #fff;
-            font-size: 1.1rem;
+            color: rgba(255,255,255,0.7);
+            font-size: 1rem;
             font-weight: 500;
         }
 
-        .card-body { padding: 16px; }
+        /* Badges */
+        .badge {
+            position: absolute;
+            top: 14px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            z-index: 2;
+            backdrop-filter: blur(8px);
+        }
+
+        .badge-status {
+            right: 14px;
+        }
+
+        .badge-type {
+            left: 14px;
+            background: rgba(0,0,0,0.55);
+            color: #fff;
+        }
+
+        .badge-favorita { background: rgba(245,158,11,0.9); color: #fff; }
+        .badge-descartada { background: rgba(239,68,68,0.9); color: #fff; }
+        .badge-visitada { background: rgba(5,150,105,0.9); color: #fff; }
+
+        .card-body { padding: 20px; }
 
         .card-price {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #2d6a4f;
-            margin-bottom: 8px;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--green);
+            margin-bottom: 4px;
+            letter-spacing: -0.5px;
         }
 
         .card-price small {
-            font-size: 0.75rem;
-            font-weight: 400;
-            color: #888;
+            font-size: 0.72rem;
+            font-weight: 500;
+            color: var(--text-muted);
         }
+
+        .card-price .tipo-tag {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 2px 8px;
+            border-radius: 6px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        .tipo-aluguel { background: #dbeafe; color: #1e40af; }
+        .tipo-venda { background: #fce7f3; color: #9d174d; }
 
         .card-location {
-            font-size: 0.95rem;
-            color: #444;
-            margin-bottom: 10px;
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            margin: 8px 0 14px;
             line-height: 1.4;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .card-location::before { content: "\U0001F4CD "; }
+        .card-location svg {
+            flex-shrink: 0;
+            color: var(--red);
+        }
 
-        .card-details {
+        .card-chips {
             display: flex;
-            gap: 14px;
-            margin-bottom: 12px;
-            font-size: 0.85rem;
-            color: #666;
+            gap: 8px;
+            margin-bottom: 14px;
             flex-wrap: wrap;
         }
 
-        .card-details span {
-            display: flex;
+        .chip {
+            display: inline-flex;
             align-items: center;
             gap: 4px;
+            padding: 5px 10px;
+            background: #f1f5f9;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .chip svg { color: var(--text-muted); }
+
+        .card-obs {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            font-style: italic;
+            padding: 8px 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 3px solid var(--primary);
         }
 
         .card-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.8rem;
-            color: #999;
-            margin-bottom: 12px;
-            padding-top: 10px;
-            border-top: 1px solid #f0f0f0;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
         }
 
-        .card-link a {
-            color: #4361ee;
+        .card-meta a {
+            color: var(--primary);
             text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 500;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: color 0.2s;
         }
 
-        .card-link a:hover { text-decoration: underline; }
+        .card-meta a:hover { color: #4338ca; }
+
+        /* Action buttons */
+        .actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 14px;
+            flex-wrap: wrap;
+        }
+
+        .act-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 12px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            background: var(--card);
+            cursor: pointer;
+            font-size: 0.78rem;
+            font-weight: 600;
+            font-family: inherit;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+
+        .act-btn:hover { background: #f8fafc; }
+
+        .act-btn.on-fav { background: var(--amber-light); border-color: var(--amber); color: #92400e; }
+        .act-btn.on-visit { background: var(--green-light); border-color: var(--green); color: #065f46; }
+        .act-btn.on-desc { background: var(--red-light); border-color: var(--red); color: #991b1b; }
 
         /* Rating */
-        .rating-section {
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid #f0f0f0;
+        .rating-row {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid var(--border);
         }
 
-        .rating-section label {
-            font-size: 0.8rem;
-            color: #888;
-            display: block;
+        .rating-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             margin-bottom: 6px;
         }
 
         .stars {
             display: flex;
-            gap: 4px;
-            margin-bottom: 10px;
+            gap: 2px;
+            align-items: center;
         }
 
         .star {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             cursor: pointer;
-            color: #ddd;
-            transition: color 0.15s;
+            color: #e2e8f0;
+            transition: all 0.15s;
             user-select: none;
         }
 
-        .star.active { color: #f4a261; }
-        .star:hover { color: #e9c46a; }
+        .star.active { color: #f59e0b; }
+        .star:hover { color: #fbbf24; transform: scale(1.15); }
 
-        .rating-value {
-            font-size: 0.8rem;
-            color: #888;
-            margin-left: 8px;
-            align-self: center;
+        .rating-num {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-left: 10px;
         }
 
         /* Comments */
-        .comments-section { margin-top: 10px; }
-
-        .comments-section label {
-            font-size: 0.8rem;
-            color: #888;
-            display: block;
-            margin-bottom: 6px;
+        .comments {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid var(--border);
         }
 
-        .comment-input-row {
+        .comments-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .author-picker {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .author-btn {
+            padding: 5px 14px;
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            background: var(--card);
+            cursor: pointer;
+            font-size: 0.78rem;
+            font-weight: 600;
+            font-family: inherit;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+
+        .author-btn.picked {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .comment-box {
             display: flex;
             gap: 6px;
         }
 
-        .comment-input-row input {
+        .comment-box input {
             flex: 1;
-            padding: 8px 10px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
+            padding: 9px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
             font-size: 0.85rem;
+            font-family: inherit;
+            transition: all 0.2s;
         }
 
-        .comment-input-row button {
-            padding: 8px 14px;
-            background: #4361ee;
+        .comment-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+        }
+
+        .comment-box button {
+            padding: 9px 18px;
+            background: var(--primary);
             color: #fff;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 0.85rem;
+            font-weight: 600;
+            font-family: inherit;
+            transition: all 0.2s;
             white-space: nowrap;
         }
 
-        .comment-input-row button:hover { background: #3a56d4; }
+        .comment-box button:hover { background: #4338ca; transform: scale(1.02); }
+        .comment-box button:active { transform: scale(0.98); }
 
-        .comment-author-row {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 6px;
-        }
-
-        .comment-author-row button {
-            padding: 4px 12px;
-            border: 2px solid #ddd;
-            border-radius: 20px;
-            background: #fff;
-            cursor: pointer;
-            font-size: 0.8rem;
-            font-weight: 500;
-            transition: all 0.15s;
-        }
-
-        .comment-author-row button.selected {
-            border-color: #4361ee;
-            background: #eef0ff;
-            color: #4361ee;
-        }
-
-        .comments-list {
-            margin-top: 8px;
+        .comment-list {
+            margin-top: 10px;
             max-height: 200px;
             overflow-y: auto;
         }
 
-        .comment-item {
+        .cmt {
             display: flex;
-            justify-content: space-between;
             align-items: flex-start;
-            padding: 8px 0;
-            border-bottom: 1px solid #f5f5f5;
-            font-size: 0.85rem;
             gap: 8px;
+            padding: 8px 0;
+            border-bottom: 1px solid #f1f5f9;
+            animation: fadeInUp 0.25s ease-out;
         }
 
-        .comment-item:last-child { border-bottom: none; }
+        .cmt:last-child { border-bottom: none; }
 
-        .comment-text {
-            flex: 1;
-            color: #444;
-            line-height: 1.4;
-        }
+        .cmt-body { flex: 1; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4; }
 
-        .comment-author-tag {
-            font-weight: 600;
-            font-size: 0.75rem;
-            padding: 1px 6px;
+        .cmt-tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 1px 7px;
             border-radius: 4px;
             margin-right: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
 
-        .comment-author-tag.bruno { background: #e3f2fd; color: #1565c0; }
-        .comment-author-tag.nova { background: #fce4ec; color: #c62828; }
+        .cmt-tag.bruno { background: #dbeafe; color: #1e40af; }
+        .cmt-tag.tha { background: #fce7f3; color: #9d174d; }
 
-        .comment-date {
-            font-size: 0.75rem;
-            color: #bbb;
-            white-space: nowrap;
-        }
+        .cmt-date { font-size: 0.72rem; color: var(--text-muted); white-space: nowrap; align-self: center; }
 
-        .comment-delete {
-            color: #ccc;
+        .cmt-del {
+            color: #cbd5e1;
             cursor: pointer;
-            font-size: 0.75rem;
-            margin-left: 4px;
+            font-size: 0.72rem;
+            align-self: center;
+            transition: color 0.2s;
+            padding: 2px 4px;
         }
 
-        .comment-delete:hover { color: #e74c3c; }
+        .cmt-del:hover { color: var(--red); }
 
-        /* Status badge */
-        .status-badge {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            z-index: 2;
-        }
-
-        .status-favorita { background: #ffd700; color: #333; }
-        .status-descartada { background: #ff6b6b; color: #fff; }
-        .status-visitada { background: #51cf66; color: #fff; }
-
-        .card-actions {
-            display: flex;
-            gap: 6px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-
-        .card-actions button {
-            padding: 4px 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            background: #fff;
-            cursor: pointer;
-            font-size: 0.75rem;
-            transition: all 0.15s;
-        }
-
-        .card-actions button:hover { background: #f8f8f8; }
-        .card-actions button.active-fav { background: #fff8dc; border-color: #ffd700; }
-        .card-actions button.active-desc { background: #ffe8e8; border-color: #ff6b6b; }
-        .card-actions button.active-visit { background: #e8ffe8; border-color: #51cf66; }
-
-        .card.descartada { opacity: 0.5; }
-
-        /* Token modal */
-        .modal-overlay {
+        /* Config button */
+        .config-float {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.5);
+            bottom: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--card);
+            border: 1.5px solid var(--border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-lg);
+            z-index: 10;
+            transition: all 0.2s;
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+
+        .config-float:hover {
+            transform: rotate(45deg) scale(1.1);
+            box-shadow: var(--shadow-xl);
+        }
+
+        /* Modal */
+        .modal-bg {
+            position: fixed;
+            inset: 0;
+            background: rgba(15,23,42,0.4);
+            backdrop-filter: blur(4px);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 100;
+            animation: fadeIn 0.2s ease-out;
         }
 
-        .modal {
-            background: #fff;
-            border-radius: 16px;
-            padding: 30px;
-            max-width: 420px;
-            width: 90%;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        .modal h2 {
-            margin-bottom: 12px;
+        .modal-box {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 440px;
+            width: 92%;
+            box-shadow: var(--shadow-xl);
+            animation: scaleIn 0.3s ease-out;
+        }
+
+        .modal-box h2 {
             font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
         }
 
-        .modal p {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 16px;
+        .modal-box p {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            margin-bottom: 18px;
             line-height: 1.5;
         }
 
-        .modal input {
+        .modal-box input {
             width: 100%;
-            padding: 10px 14px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            padding: 11px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
             font-size: 0.9rem;
-            margin-bottom: 12px;
+            font-family: inherit;
+            margin-bottom: 14px;
+            transition: all 0.2s;
         }
 
-        .modal button {
+        .modal-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79,70,229,0.12);
+        }
+
+        .modal-box button {
             width: 100%;
-            padding: 10px;
-            background: #4361ee;
+            padding: 11px;
+            background: var(--primary);
             color: #fff;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 0.95rem;
+            font-weight: 600;
+            font-family: inherit;
             cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .modal button:hover { background: #3a56d4; }
+        .modal-box button:hover { background: #4338ca; }
 
-        /* Config button */
-        .config-btn {
-            position: fixed;
-            bottom: 16px;
-            right: 16px;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #fff;
-            border: 1px solid #ddd;
-            cursor: pointer;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            z-index: 10;
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
         }
 
-        .config-btn:hover { background: #f8f8f8; }
+        .empty-state p { font-size: 1rem; }
 
         /* Responsive */
         @media (max-width: 600px) {
-            body { padding: 12px; }
-            .grid { grid-template-columns: 1fr; }
-            header h1 { font-size: 1.4rem; }
+            .hero { padding: 36px 16px 44px; }
+            .hero h1 { font-size: 1.6rem; }
+            .container { padding: 0 12px; }
+            .grid { grid-template-columns: 1fr; gap: 16px; }
+            .card-price { font-size: 1.3rem; }
         }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>Novas Casas</h1>
-    <p>Bruno & Nova - Casas para alugar</p>
-</header>
-
-<div class="sync-status" id="syncStatus"></div>
-
-<div class="filters">
-    <select id="filterSort" onchange="renderCards()">
-        <option value="date-desc">Mais recentes</option>
-        <option value="date-asc">Mais antigas</option>
-        <option value="price-asc">Menor preco</option>
-        <option value="price-desc">Maior preco</option>
-        <option value="rating-desc">Melhor nota</option>
-    </select>
-    <select id="filterStatus" onchange="renderCards()">
-        <option value="all">Todas</option>
-        <option value="none">Sem status</option>
-        <option value="favorita">Favoritas</option>
-        <option value="visitada">Visitadas</option>
-        <option value="descartada">Descartadas</option>
-    </select>
-    <input type="text" id="filterSearch" placeholder="Buscar bairro..." oninput="renderCards()">
+<div class="hero">
+    <h1>Casas para Alugar</h1>
+    <p>Bru & Tha</p>
 </div>
 
-<div class="stats" id="stats"></div>
-<div class="grid" id="grid"></div>
+<div class="sync-bar hidden" id="syncBar"></div>
 
-<button class="config-btn" onclick="showTokenModal()" title="Configuracoes">&#9881;</button>
+<div class="container">
+    <div class="toolbar">
+        <select id="filterSort" onchange="renderCards()">
+            <option value="date-desc">Mais recentes</option>
+            <option value="date-asc">Mais antigas</option>
+            <option value="price-asc">Menor preco</option>
+            <option value="price-desc">Maior preco</option>
+            <option value="rating-desc">Melhor nota</option>
+        </select>
+        <select id="filterStatus" onchange="renderCards()">
+            <option value="all">Todas</option>
+            <option value="none">Sem status</option>
+            <option value="favorita">Favoritas</option>
+            <option value="visitada">Visitadas</option>
+            <option value="descartada">Descartadas</option>
+        </select>
+        <select id="filterType" onchange="renderCards()">
+            <option value="all">Venda & Aluguel</option>
+            <option value="aluguel">Aluguel</option>
+            <option value="venda">Venda</option>
+        </select>
+        <input type="text" id="filterSearch" placeholder="Buscar bairro..." oninput="renderCards()">
+    </div>
+
+    <div class="stats" id="stats"></div>
+    <div class="grid" id="grid"></div>
+</div>
+
+<button class="config-float" onclick="showTokenModal()" title="Configuracoes">&#9881;</button>
 
 <script>
 // ============================================================
-// CASAS - Adicione novas casas aqui no topo do array
+// CASAS
 // ============================================================
 const CASAS = [
-    // {
-    //     id: "casa-001",
-    //     foto: "URL_DA_FOTO",
-    //     preco: 3500,
-    //     condominio: 500,
-    //     endereco: "Rua Exemplo, 123 - Bairro, Cidade/SP",
-    //     quartos: 3,
-    //     banheiros: 2,
-    //     vagas: 1,
-    //     area: 85,
-    //     mobiliada: false,
-    //     aceita_pet: true,
-    //     link: "URL_DO_ANUNCIO",
-    //     data: "2026-03-24",
-    //     obs: "Observacao inicial"
-    // },
+    {
+        id: "casa-006",
+        foto: "",
+        preco: 10000,
+        tipo: "aluguel",
+        condominio: 0,
+        endereco: "Cajuru do Sul - Sorocaba/SP",
+        quartos: 4,
+        banheiros: 0,
+        vagas: 0,
+        area: 350,
+        mobiliada: false,
+        aceita_pet: false,
+        link: "https://www.vivareal.com.br/imovel/casa-de-condominio-4-quartos-cajuru-do-sul-bairros-sorocaba-com-garagem-350m2-aluguel-RS10000-id-2867542674/",
+        data: "2026-03-24",
+        obs: "Casa de condominio com garagem"
+    },
+    {
+        id: "casa-005",
+        foto: "",
+        preco: 2200000,
+        tipo: "venda",
+        condominio: 0,
+        endereco: "Ibiti Royal Park - Sorocaba/SP",
+        quartos: 4,
+        banheiros: 0,
+        vagas: 0,
+        area: 270,
+        mobiliada: false,
+        aceita_pet: false,
+        link: "https://www.vivareal.com.br/imovel/casa-de-condominio-4-quartos-ibiti-royal-park-bairros-sorocaba-com-garagem-270m2-venda-RS2200000-id-2863393760/",
+        data: "2026-03-24",
+        obs: "Casa de condominio com garagem"
+    },
+    {
+        id: "casa-004",
+        foto: "",
+        preco: 1750000,
+        tipo: "venda",
+        condominio: 0,
+        endereco: "Cond. Ibiti Reserva - Sorocaba/SP",
+        quartos: 3,
+        banheiros: 0,
+        vagas: 0,
+        area: 260,
+        mobiliada: false,
+        aceita_pet: false,
+        link: "https://www.vivareal.com.br/imovel/casa-de-condominio-3-quartos-condominio-ibiti-reserva-bairros-sorocaba-com-garagem-260m2-venda-RS1750000-id-2869042412/",
+        data: "2026-03-24",
+        obs: "Casa de condominio com garagem"
+    },
+    {
+        id: "casa-003",
+        foto: "",
+        preco: 2290000,
+        tipo: "venda",
+        condominio: 0,
+        endereco: "Cond. Terras de Sao Lucas - Sorocaba/SP",
+        quartos: 3,
+        banheiros: 0,
+        vagas: 0,
+        area: 371,
+        mobiliada: false,
+        aceita_pet: false,
+        link: "https://www.vivareal.com.br/imovel/casa-de-condominio-3-quartos-condominio-terras-de-sao-lucas-bairros-sorocaba-com-garagem-371m2-venda-RS2290000-id-2874014023/",
+        data: "2026-03-24",
+        obs: "Casa de condominio com garagem"
+    },
+    {
+        id: "casa-002",
+        foto: "",
+        preco: 8800,
+        tipo: "aluguel",
+        condominio: 0,
+        endereco: "Ibiti Royal Park - Sorocaba/SP",
+        quartos: 3,
+        banheiros: 0,
+        vagas: 0,
+        area: 250,
+        mobiliada: false,
+        aceita_pet: false,
+        link: "https://www.vivareal.com.br/imovel/casa-de-condominio-3-quartos-ibiti-royal-park-bairros-sorocaba-com-garagem-250m2-aluguel-RS8800-id-2868962305/",
+        data: "2026-03-24",
+        obs: "Casa de condominio com garagem"
+    },
+    {
+        id: "casa-001",
+        foto: "",
+        preco: 1700000,
+        tipo: "venda",
+        condominio: 0,
+        endereco: "Parque Ibiti Reserva - Sorocaba/SP",
+        quartos: 4,
+        banheiros: 0,
+        vagas: 0,
+        area: 270,
+        mobiliada: false,
+        aceita_pet: false,
+        link: "https://www.vivareal.com.br/imovel/casa-de-condominio-4-quartos-parque-ibiti-reserva-bairros-sorocaba-com-garagem-270m2-venda-RS1700000-id-2853706232/",
+        data: "2026-03-24",
+        obs: "Casa de condominio com garagem"
+    },
 ];
 
 // ============================================================
-// GitHub API - Shared data.json
+// GitHub API
 // ============================================================
-const REPO_OWNER = "BrunexT3";
-const REPO_NAME = "novas-casas";
-const DATA_FILE = "data.json";
-const API_BASE = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${DATA_FILE}`;
+const REPO = "BrunexT3/novas-casas";
+const API = `https://api.github.com/repos/${REPO}/contents/data.json`;
 
-let sharedData = {};
+let shared = {};
 let fileSha = null;
-let saveTimeout = null;
-let selectedAuthors = {}; // local-only, not saved to git
+let saveTimer = null;
+let authors = {};
 
-function getToken() {
-    return localStorage.getItem("novas-casas-token") || "";
+function getToken() { return localStorage.getItem("nc-token") || ""; }
+function setToken(t) { localStorage.setItem("nc-token", t.trim()); }
+
+function syncUI(msg, cls) {
+    const el = document.getElementById("syncBar");
+    el.textContent = msg;
+    el.className = "sync-bar " + cls;
+    if (cls === "saved") setTimeout(() => { el.className = "sync-bar hidden"; }, 2500);
 }
 
-function setToken(token) {
-    localStorage.setItem("novas-casas-token", token.trim());
-}
-
-function setSyncStatus(text, cls) {
-    const el = document.getElementById("syncStatus");
-    el.textContent = text;
-    el.className = "sync-status " + (cls || "");
-}
-
-// Load data.json from GitHub
-async function loadSharedData() {
-    setSyncStatus("Carregando dados...", "saving");
+async function loadShared() {
+    syncUI("Carregando...", "saving");
     try {
-        const token = getToken();
-        const headers = { "Accept": "application/vnd.github.v3+json" };
-        if (token) headers["Authorization"] = `token ${token}`;
-
-        const resp = await fetch(API_BASE, { headers, cache: "no-store" });
-        if (resp.status === 404) {
-            // File doesn't exist yet - will be created on first save
-            sharedData = {};
-            fileSha = null;
-            setSyncStatus("Pronto (sem dados ainda)", "saved");
-            return;
-        }
-        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-
-        const json = await resp.json();
-        fileSha = json.sha;
-        const content = atob(json.content.replace(/\n/g, ""));
-        sharedData = JSON.parse(content);
-        setSyncStatus("Dados carregados", "saved");
-    } catch (err) {
-        console.error("Load error:", err);
-        if (!getToken()) {
-            showTokenModal();
-        } else {
-            setSyncStatus("Erro ao carregar: " + err.message, "error");
-        }
+        const h = { Accept: "application/vnd.github.v3+json" };
+        const t = getToken();
+        if (t) h.Authorization = `token ${t}`;
+        const r = await fetch(API, { headers: h, cache: "no-store" });
+        if (r.status === 404) { shared = {}; fileSha = null; syncUI("Pronto", "saved"); return; }
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        const j = await r.json();
+        fileSha = j.sha;
+        shared = JSON.parse(atob(j.content.replace(/\n/g, "")));
+        syncUI("Dados carregados", "saved");
+    } catch (e) {
+        if (!getToken()) showTokenModal();
+        else syncUI("Erro: " + e.message, "error");
     }
 }
 
-// Save data.json to GitHub (debounced)
 function scheduleSave() {
-    if (saveTimeout) clearTimeout(saveTimeout);
-    saveTimeout = setTimeout(() => saveSharedData(), 1500);
+    if (saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveShared, 1500);
 }
 
-async function saveSharedData() {
-    const token = getToken();
-    if (!token) {
-        showTokenModal();
-        return;
-    }
-
-    setSyncStatus("Salvando...", "saving");
+async function saveShared() {
+    const t = getToken();
+    if (!t) { showTokenModal(); return; }
+    syncUI("Salvando...", "saving");
     try {
-        // Re-read to get latest sha (avoid conflicts)
-        const headers = {
-            "Accept": "application/vnd.github.v3+json",
-            "Authorization": `token ${token}`
-        };
-
-        const getResp = await fetch(API_BASE, { headers, cache: "no-store" });
-        if (getResp.ok) {
-            const current = await getResp.json();
-            fileSha = current.sha;
-        }
-
-        const content = btoa(unescape(encodeURIComponent(JSON.stringify(sharedData, null, 2))));
-        const body = {
-            message: "update data",
-            content: content,
-        };
+        const h = { Accept: "application/vnd.github.v3+json", Authorization: `token ${t}`, "Content-Type": "application/json" };
+        const gr = await fetch(API, { headers: h, cache: "no-store" });
+        if (gr.ok) fileSha = (await gr.json()).sha;
+        const body = { message: "update data", content: btoa(unescape(encodeURIComponent(JSON.stringify(shared, null, 2)))) };
         if (fileSha) body.sha = fileSha;
-
-        const putResp = await fetch(API_BASE, {
-            method: "PUT",
-            headers: {
-                ...headers,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(body)
-        });
-
-        if (!putResp.ok) {
-            const errBody = await putResp.json();
-            throw new Error(errBody.message || `HTTP ${putResp.status}`);
-        }
-
-        const result = await putResp.json();
-        fileSha = result.content.sha;
+        const pr = await fetch(API, { method: "PUT", headers: h, body: JSON.stringify(body) });
+        if (!pr.ok) throw new Error((await pr.json()).message || `HTTP ${pr.status}`);
+        fileSha = (await pr.json()).content.sha;
         const now = new Date();
-        setSyncStatus(`Salvo ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`, "saved");
-    } catch (err) {
-        console.error("Save error:", err);
-        setSyncStatus("Erro ao salvar: " + err.message, "error");
+        syncUI(`Salvo ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`, "saved");
+    } catch (e) {
+        syncUI("Erro ao salvar: " + e.message, "error");
     }
 }
 
-// ============================================================
-// Data helpers (use sharedData instead of localStorage)
-// ============================================================
-function getCardData(id) {
-    if (!sharedData[id]) sharedData[id] = { rating: 0, comments: [], status: "none" };
-    return sharedData[id];
+function getData(id) {
+    if (!shared[id]) shared[id] = { rating: 0, comments: [], status: "none" };
+    return shared[id];
 }
 
-function setCardData(id, cardData) {
-    sharedData[id] = cardData;
-    scheduleSave();
-}
+function setData(id, d) { shared[id] = d; scheduleSave(); }
 
 // ============================================================
-// Token modal
+// Modal
 // ============================================================
 function showTokenModal() {
-    // Remove existing modal
-    const existing = document.getElementById("tokenModal");
+    const existing = document.getElementById("tkModal");
     if (existing) existing.remove();
-
-    const modal = document.createElement("div");
-    modal.id = "tokenModal";
-    modal.className = "modal-overlay";
-    modal.innerHTML = `
-        <div class="modal">
-            <h2>Configuracao</h2>
-            <p>Cole o token do GitHub para salvar comentarios e notas de forma compartilhada.
-            O token fica salvo apenas no seu navegador.</p>
-            <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxx" value="${getToken()}">
-            <button onclick="saveToken()">Salvar</button>
-        </div>
-    `;
-    document.body.appendChild(modal);
-    document.getElementById("tokenInput").focus();
+    const m = document.createElement("div");
+    m.id = "tkModal";
+    m.className = "modal-bg";
+    m.innerHTML = `
+        <div class="modal-box">
+            <h2>Token do GitHub</h2>
+            <p>Cole o Personal Access Token para sincronizar notas e comentarios entre voce e Tha. O token fica salvo apenas neste navegador.</p>
+            <input type="password" id="tkInput" placeholder="ghp_xxxxxxxxxxxx" value="${getToken()}">
+            <button onclick="saveTk()">Salvar</button>
+        </div>`;
+    document.body.appendChild(m);
+    document.getElementById("tkInput").focus();
 }
 
-async function saveToken() {
-    const input = document.getElementById("tokenInput");
-    setToken(input.value);
-    document.getElementById("tokenModal").remove();
-    await loadSharedData();
+async function saveTk() {
+    setToken(document.getElementById("tkInput").value);
+    document.getElementById("tkModal").remove();
+    await loadShared();
     renderCards();
 }
+
+// ============================================================
+// SVG icons
+// ============================================================
+const ICO = {
+    pin: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+    bed: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v11m0-4h18m0 4V11a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2m-3 0V7"/><path d="M7 7V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2"/></svg>',
+    bath: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16a1 1 0 0 1 1 1v3a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4v-3a1 1 0 0 1 1-1zM6 12V5a2 2 0 0 1 2-2h3v3"/></svg>',
+    car: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 17h14M5 17a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2M5 17v2m14-2v2"/><circle cx="7.5" cy="13.5" r="1.5"/><circle cx="16.5" cy="13.5" r="1.5"/></svg>',
+    area: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg>',
+    ext: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>',
+};
 
 // ============================================================
 // Render
@@ -658,187 +917,143 @@ async function saveToken() {
 function renderCards() {
     const grid = document.getElementById("grid");
     const sort = document.getElementById("filterSort").value;
-    const statusFilter = document.getElementById("filterStatus").value;
+    const statusF = document.getElementById("filterStatus").value;
+    const typeF = document.getElementById("filterType").value;
     const search = document.getElementById("filterSearch").value.toLowerCase();
 
-    let casas = [...CASAS];
+    let list = [...CASAS];
+    if (search) list = list.filter(c => c.endereco.toLowerCase().includes(search));
+    if (statusF !== "all") list = list.filter(c => (getData(c.id).status || "none") === statusF);
+    if (typeF !== "all") list = list.filter(c => c.tipo === typeF);
 
-    if (search) {
-        casas = casas.filter(c => c.endereco.toLowerCase().includes(search));
-    }
-    if (statusFilter !== "all") {
-        casas = casas.filter(c => {
-            const d = getCardData(c.id);
-            return (d.status || "none") === statusFilter;
-        });
-    }
-
-    casas.sort((a, b) => {
+    list.sort((a, b) => {
         switch (sort) {
             case "date-desc": return b.data.localeCompare(a.data);
             case "date-asc": return a.data.localeCompare(b.data);
             case "price-asc": return a.preco - b.preco;
             case "price-desc": return b.preco - a.preco;
-            case "rating-desc":
-                return (getCardData(b.id).rating || 0) - (getCardData(a.id).rating || 0);
+            case "rating-desc": return (getData(b.id).rating||0) - (getData(a.id).rating||0);
         }
     });
 
-    const totalFav = CASAS.filter(c => (sharedData[c.id]?.status) === "favorita").length;
+    const favs = CASAS.filter(c => shared[c.id]?.status === "favorita").length;
     document.getElementById("stats").textContent =
-        `${CASAS.length} casa${CASAS.length !== 1 ? 's' : ''} | ${totalFav} favorita${totalFav !== 1 ? 's' : ''} | Mostrando ${casas.length}`;
+        `${CASAS.length} casa${CASAS.length!==1?'s':''} \u00B7 ${favs} favorita${favs!==1?'s':''} \u00B7 Mostrando ${list.length}`;
 
-    grid.innerHTML = casas.map(casa => {
-        const d = getCardData(casa.id);
-        const author = selectedAuthors[casa.id] || "bruno";
+    if (!list.length) {
+        grid.innerHTML = '<div class="empty-state"><p>Nenhuma casa encontrada com esses filtros</p></div>';
+        return;
+    }
 
-        const imgHtml = casa.foto
-            ? `<img class="card-img" src="${casa.foto}" alt="Foto" onclick="window.open('${casa.link}','_blank')" onerror="this.outerHTML='<div class=card-img-placeholder>Sem foto</div>'">`
-            : `<div class="card-img-placeholder">Sem foto</div>`;
+    grid.innerHTML = list.map((c, idx) => {
+        const d = getData(c.id);
+        const author = authors[c.id] || "bruno";
+
+        const img = c.foto
+            ? `<img class="card-img" src="${c.foto}" alt="" onclick="window.open('${c.link}','_blank')" onerror="this.outerHTML='<div class=card-img-placeholder>Sem foto</div>'">`
+            : `<div class="card-img-placeholder">Sem foto disponivel</div>`;
 
         const statusBadge = d.status && d.status !== "none"
-            ? `<span class="status-badge status-${d.status}">${d.status.charAt(0).toUpperCase() + d.status.slice(1)}</span>`
-            : "";
+            ? `<span class="badge badge-status badge-${d.status}">${d.status}</span>` : "";
+
+        const tipoBadge = `<span class="badge badge-type">${c.tipo}</span>`;
+
+        const priceStr = c.tipo === "aluguel"
+            ? `R$ ${c.preco.toLocaleString('pt-BR')}<small>/mes</small>`
+            : `R$ ${c.preco.toLocaleString('pt-BR')}`;
+
+        const tipoTag = `<span class="tipo-tag tipo-${c.tipo}">${c.tipo}</span>`;
+        const condStr = c.condominio ? ` <small>+ R$ ${c.condominio.toLocaleString('pt-BR')} cond.</small>` : "";
+
+        const chips = [];
+        if (c.quartos) chips.push(`${ICO.bed} ${c.quartos} qto${c.quartos>1?'s':''}`);
+        if (c.banheiros) chips.push(`${ICO.bath} ${c.banheiros} ban${c.banheiros>1?'h':'h'}`);
+        if (c.vagas) chips.push(`${ICO.car} ${c.vagas} vaga${c.vagas>1?'s':''}`);
+        if (c.area) chips.push(`${ICO.area} ${c.area}m\u00B2`);
 
         const stars = [1,2,3,4,5].map(i =>
-            `<span class="star ${i <= d.rating ? 'active' : ''}" onclick="setRating('${casa.id}', ${i})">&#9733;</span>`
+            `<span class="star ${i<=d.rating?'active':''}" onclick="setRating('${c.id}',${i})">&#9733;</span>`
         ).join("");
 
-        const comments = (d.comments || []).map((c, idx) =>
-            `<div class="comment-item">
-                <div class="comment-text">
-                    <span class="comment-author-tag ${c.author || 'bruno'}">${(c.author || 'Bruno').charAt(0).toUpperCase() + (c.author || 'bruno').slice(1)}</span>
-                    ${escapeHtml(c.text)}
-                </div>
-                <span class="comment-date">${c.date || ''}</span>
-                <span class="comment-delete" onclick="deleteComment('${casa.id}', ${idx})">x</span>
+        const cmts = (d.comments||[]).map((cm, i) =>
+            `<div class="cmt">
+                <div class="cmt-body"><span class="cmt-tag ${cm.author||'bruno'}">${(cm.author||'Bruno')}</span>${esc(cm.text)}</div>
+                <span class="cmt-date">${cm.date||''}</span>
+                <span class="cmt-del" onclick="delCmt('${c.id}',${i})">&#10005;</span>
             </div>`
         ).join("");
 
-        const detailItems = [];
-        if (casa.quartos) detailItems.push(`<span>${casa.quartos} quarto${casa.quartos > 1 ? 's' : ''}</span>`);
-        if (casa.banheiros) detailItems.push(`<span>${casa.banheiros} banheiro${casa.banheiros > 1 ? 's' : ''}</span>`);
-        if (casa.vagas !== undefined) detailItems.push(`<span>${casa.vagas} vaga${casa.vagas !== 1 ? 's' : ''}</span>`);
-        if (casa.area) detailItems.push(`<span>${casa.area}m&sup2;</span>`);
-        const tags = [];
-        if (casa.mobiliada) tags.push("Mobiliada");
-        if (casa.aceita_pet) tags.push("Aceita pet");
-
-        const condText = casa.condominio ? ` <small>+ R$ ${casa.condominio.toLocaleString('pt-BR')} cond.</small>` : "";
+        const [y,m,dd] = c.data.split("-");
 
         return `
-        <div class="card${d.status === 'descartada' ? ' descartada' : ''}" id="card-${casa.id}">
-            ${statusBadge}
-            ${imgHtml}
+        <div class="card${d.status==='descartada'?' descartada':''}" style="animation-delay:${idx*0.06}s">
+            <div class="card-img-wrapper">
+                ${tipoBadge}${statusBadge}${img}
+            </div>
             <div class="card-body">
-                <div class="card-price">R$ ${casa.preco.toLocaleString('pt-BR')}${condText}</div>
-                <div class="card-location">${escapeHtml(casa.endereco)}</div>
-                <div class="card-details">
-                    ${detailItems.join("")}
-                    ${tags.map(t => `<span style="background:#f0f0f0;padding:2px 8px;border-radius:10px;font-size:0.78rem">${t}</span>`).join("")}
+                <div class="card-price">${priceStr}${tipoTag}${condStr}</div>
+                <div class="card-location">${ICO.pin} ${esc(c.endereco)}</div>
+                <div class="card-chips">
+                    ${chips.map(ch=>`<span class="chip">${ch}</span>`).join("")}
                 </div>
-                ${casa.obs ? `<div style="font-size:0.85rem;color:#666;margin-bottom:8px;font-style:italic">${escapeHtml(casa.obs)}</div>` : ""}
+                ${c.obs?`<div class="card-obs">${esc(c.obs)}</div>`:''}
                 <div class="card-meta">
-                    <span>Adicionada em ${formatDate(casa.data)}</span>
-                    <span class="card-link"><a href="${casa.link}" target="_blank">Ver anuncio</a></span>
+                    <span>${dd}/${m}/${y}</span>
+                    <a href="${c.link}" target="_blank">${ICO.ext} Ver anuncio</a>
                 </div>
-
-                <div class="card-actions">
-                    <button class="${d.status === 'favorita' ? 'active-fav' : ''}" onclick="toggleStatus('${casa.id}','favorita')">&#9733; Favorita</button>
-                    <button class="${d.status === 'visitada' ? 'active-visit' : ''}" onclick="toggleStatus('${casa.id}','visitada')">&#10003; Visitada</button>
-                    <button class="${d.status === 'descartada' ? 'active-desc' : ''}" onclick="toggleStatus('${casa.id}','descartada')">&#10007; Descartada</button>
+                <div class="actions">
+                    <button class="act-btn ${d.status==='favorita'?'on-fav':''}" onclick="togStatus('${c.id}','favorita')">&#9733; Favorita</button>
+                    <button class="act-btn ${d.status==='visitada'?'on-visit':''}" onclick="togStatus('${c.id}','visitada')">&#10003; Visitada</button>
+                    <button class="act-btn ${d.status==='descartada'?'on-desc':''}" onclick="togStatus('${c.id}','descartada')">&#10007; Descartada</button>
                 </div>
-
-                <div class="rating-section">
-                    <label>Nota</label>
-                    <div class="stars">
-                        ${stars}
-                        <span class="rating-value">${d.rating > 0 ? d.rating + '/5' : '-'}</span>
-                    </div>
+                <div class="rating-row">
+                    <div class="rating-label">Nota</div>
+                    <div class="stars">${stars}<span class="rating-num">${d.rating>0?d.rating+'/5':'-'}</span></div>
                 </div>
-
-                <div class="comments-section">
-                    <label>Comentarios</label>
-                    <div class="comment-author-row">
-                        <button class="${author === 'bruno' ? 'selected' : ''}" onclick="selectAuthor('${casa.id}','bruno')">Bruno</button>
-                        <button class="${author === 'nova' ? 'selected' : ''}" onclick="selectAuthor('${casa.id}','nova')">Nova</button>
+                <div class="comments">
+                    <div class="comments-label">Comentarios</div>
+                    <div class="author-picker">
+                        <button class="author-btn ${author==='bruno'?'picked':''}" onclick="pickAuthor('${c.id}','bruno')">Bru</button>
+                        <button class="author-btn ${author==='tha'?'picked':''}" onclick="pickAuthor('${c.id}','tha')">Tha</button>
                     </div>
-                    <div class="comment-input-row">
-                        <input type="text" id="input-${casa.id}" placeholder="Escrever comentario..." onkeydown="if(event.key==='Enter')addComment('${casa.id}')">
-                        <button onclick="addComment('${casa.id}')">Enviar</button>
+                    <div class="comment-box">
+                        <input id="inp-${c.id}" placeholder="Escrever..." onkeydown="if(event.key==='Enter')addCmt('${c.id}')">
+                        <button onclick="addCmt('${c.id}')">Enviar</button>
                     </div>
-                    <div class="comments-list">${comments}</div>
+                    <div class="comment-list">${cmts}</div>
                 </div>
             </div>
         </div>`;
     }).join("");
 }
 
-function escapeHtml(text) {
-    const d = document.createElement('div');
-    d.textContent = text;
-    return d.innerHTML;
-}
+function esc(t) { const d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
 
-function formatDate(dateStr) {
-    if (!dateStr) return "-";
-    const [y, m, d] = dateStr.split("-");
-    return `${d}/${m}/${y}`;
-}
+function setRating(id, r) { const d=getData(id); d.rating=d.rating===r?0:r; setData(id,d); renderCards(); }
+function togStatus(id, s) { const d=getData(id); d.status=d.status===s?"none":s; setData(id,d); renderCards(); }
+function pickAuthor(id, a) { authors[id]=a; renderCards(); }
 
-function setRating(id, rating) {
-    const d = getCardData(id);
-    d.rating = d.rating === rating ? 0 : rating;
-    setCardData(id, d);
-    renderCards();
-}
-
-function toggleStatus(id, status) {
-    const d = getCardData(id);
-    d.status = d.status === status ? "none" : status;
-    setCardData(id, d);
-    renderCards();
-}
-
-function selectAuthor(id, author) {
-    selectedAuthors[id] = author;
-    renderCards();
-}
-
-function addComment(id) {
-    const input = document.getElementById(`input-${id}`);
-    const text = input.value.trim();
-    if (!text) return;
-    const d = getCardData(id);
-    if (!d.comments) d.comments = [];
-    const now = new Date();
-    const author = selectedAuthors[id] || "bruno";
+function addCmt(id) {
+    const inp=document.getElementById(`inp-${id}`);
+    const txt=inp.value.trim();
+    if(!txt) return;
+    const d=getData(id);
+    if(!d.comments) d.comments=[];
+    const now=new Date();
     d.comments.push({
-        text,
-        author,
+        text: txt,
+        author: authors[id]||"bruno",
         date: `${now.getDate().toString().padStart(2,'0')}/${(now.getMonth()+1).toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`
     });
-    setCardData(id, d);
-    input.value = "";
+    setData(id,d);
+    inp.value="";
     renderCards();
 }
 
-function deleteComment(id, idx) {
-    const d = getCardData(id);
-    d.comments.splice(idx, 1);
-    setCardData(id, d);
-    renderCards();
-}
+function delCmt(id, i) { const d=getData(id); d.comments.splice(i,1); setData(id,d); renderCards(); }
 
-// ============================================================
 // Init
-// ============================================================
-async function init() {
-    await loadSharedData();
-    renderCards();
-}
-
-init();
+(async()=>{ await loadShared(); renderCards(); })();
 </script>
 
 </body>
